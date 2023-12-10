@@ -1,7 +1,5 @@
 import React from "react";
 
-export default function NotAvailable() {
-  return (
-    <h1 className="not-available">No Movies Available for selected Genre</h1>
-  );
+export default function NotAvailable(props) {
+  return <h1 className="not-available">{props.content}</h1>;
 }
