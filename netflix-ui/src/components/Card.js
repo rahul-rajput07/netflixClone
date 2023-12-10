@@ -4,7 +4,7 @@ import styled from "styled-components";
 import video from "../assets/video.mp4";
 import { IoPlayCircleSharp } from "react-icons/io5";
 import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
-import { BsCheck } from "react-icons/bs";
+import { RxCrossCircled } from "react-icons/rx";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import { onAuthStateChanged } from "firebase/auth";
@@ -72,14 +72,14 @@ export default React.memo(function Card({ movieData, isLiked = false }) {
             <div className="icons flex j-between">
               <div className="controls flex">
                 <IoPlayCircleSharp
-                  title="play"
+                  title="Play"
                   onClick={() => navigate("/player")}
                 />
                 <RiThumbUpFill title="Like" />
                 <RiThumbDownFill title="Dislike" />
                 {isLiked ? (
-                  <BsCheck
-                    title="Remove from List"
+                  <RxCrossCircled
+                    title="Remove from My List"
                     onClick={() => {
                       dispatch(
                         removeFromLikedMovies({ movieId: movieData.id, email })
@@ -87,7 +87,7 @@ export default React.memo(function Card({ movieData, isLiked = false }) {
                     }}
                   />
                 ) : (
-                  <AiOutlinePlus title="Add to my List" onClick={addToList} />
+                  <AiOutlinePlus title="Add to My List" onClick={addToList} />
                 )}
               </div>
               <div className="info">
