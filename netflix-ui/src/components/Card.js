@@ -10,11 +10,13 @@ import { BiChevronDown } from "react-icons/bi";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { removeFromLikedMovies } from "../store";
 import { BASE_URL } from "../utils/constants";
 
-export default React.memo(function Card({ movieData, isLiked = false }) {
+export default React.memo(function Card({
+  movieData,
+  isLiked = false,
+  movies,
+}) {
   const [isHovered, setIsHovered] = useState(false);
   const [email, setEmail] = useState(undefined);
   const navigate = useNavigate();
@@ -27,8 +29,6 @@ export default React.memo(function Card({ movieData, isLiked = false }) {
     }
   });
 
-  const dispatch = useDispatch();
-
   const addToList = async () => {
     try {
       await axios.post(`${BASE_URL}/api/user/add`, {
@@ -39,6 +39,7 @@ export default React.memo(function Card({ movieData, isLiked = false }) {
       console.log(error);
     }
   };
+
   return (
     <Container
       onMouseEnter={() => setIsHovered(true)}
@@ -81,9 +82,7 @@ export default React.memo(function Card({ movieData, isLiked = false }) {
                   <RxCrossCircled
                     title="Remove from My List"
                     onClick={() => {
-                      dispatch(
-                        removeFromLikedMovies({ movieId: movieData.id, email })
-                      );
+                      movies(movieData, email);
                     }}
                   />
                 ) : (

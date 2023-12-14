@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUserLikedMovies } from "../store";
+import { getUserLikedMovies, removeFromLikedMovies } from "../store";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import styled from "styled-components";
@@ -11,8 +11,9 @@ import Card from "../components/Card";
 export default function UserLiked() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
-  const movies = useSelector((state) => state.netflix.movies);
+  // const movies = useSelector((state) => state.netflix.movies);
   const [email, setEmail] = useState(undefined);
+  const [movies, setMovies] = useState([]);
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (currentUser) {
       setEmail(currentUser.email);
@@ -21,14 +22,27 @@ export default function UserLiked() {
     }
   });
   const dispatch = useDispatch();
+
+  const getResult = async () => {
+    const result = await dispatch(getUserLikedMovies(email)).unwrap();
+    console.log(result);
+    setMovies(result);
+  };
   useEffect(() => {
     if (email) {
-      dispatch(getUserLikedMovies(email));
+      getResult();
     }
   }, [email]);
   window.onscroll = () => {
     setIsScrolled(window.scrollY === 0 ? false : true);
     return () => (window.onscroll = null);
+  };
+
+  const removeMovies = async (movieData, email) => {
+    const response = await dispatch(
+      removeFromLikedMovies({ movieId: movieData.id, email })
+    ).unwrap();
+    setMovies(response);
   };
 
   return (
@@ -37,13 +51,14 @@ export default function UserLiked() {
       <div className="content flex column">
         <h1>My List</h1>
         <div className="grid flex">
-          {movies.map((movie, index) => {
+          {movies?.map((movie, index) => {
             return (
               <Card
                 movieData={movie}
                 index={index}
                 key={movie.id}
                 isLiked={true}
+                movies={(movieData, email) => removeMovies(movieData, email)}
               />
             );
           })}
