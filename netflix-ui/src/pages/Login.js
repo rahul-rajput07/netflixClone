@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 export default function Login() {
   const [formValues, setFormValues] = useState({
@@ -17,8 +18,10 @@ export default function Login() {
     try {
       const { email, password } = formValues;
       await signInWithEmailAndPassword(firebaseAuth, email, password);
+      message.success("Logged In Successfully");
     } catch (error) {
       console.log(error);
+      message.error("Invalid username or password");
     }
   };
 

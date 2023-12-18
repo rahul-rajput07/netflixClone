@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaPowerOff, FaSearch } from "react-icons/fa";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
+import { message } from "antd";
 
 export default function Navbar({ isScrolled }) {
   const links = [
@@ -63,7 +64,14 @@ export default function Navbar({ isScrolled }) {
               }}
             />
           </div>
-          <button onClick={() => signOut(firebaseAuth)}>
+          <button
+            onClick={() => {
+              signOut(firebaseAuth);
+              setTimeout(() => {
+                message.success("Logged out successfully!");
+              }, 500);
+            }}
+          >
             <FaPowerOff />
           </button>
         </div>

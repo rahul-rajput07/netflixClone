@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,10 +18,11 @@ export default function Signup() {
   });
   const navigate = useNavigate();
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     try {
       const { email, password } = formValues;
       await createUserWithEmailAndPassword(firebaseAuth, email, password);
+      message.success("SignUp successfull");
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +77,7 @@ export default function Signup() {
               <button onClick={() => setShowPassword(true)}>Get Started</button>
             )}
           </div>
-          <button onClick={handleSignIn}>Sign Up</button>
+          <button onClick={handleSignUp}>Sign Up</button>
         </div>
       </div>
     </Container>

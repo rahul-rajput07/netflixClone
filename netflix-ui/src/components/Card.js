@@ -11,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
+import { message } from "antd";
 
 export default React.memo(function Card({
   movieData,
@@ -31,10 +32,12 @@ export default React.memo(function Card({
 
   const addToList = async () => {
     try {
+      message.loading("Adding", 0.8);
       await axios.post(`${BASE_URL}/api/user/add`, {
         email,
         data: movieData,
       });
+      message.success("Movie Added to My List");
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +85,11 @@ export default React.memo(function Card({
                   <RxCrossCircled
                     title="Remove from My List"
                     onClick={() => {
+                      message.loading("Removing", 1);
                       movies(movieData, email);
+                      setTimeout(() => {
+                        message.success("Movie Removed from My List");
+                      }, 1200);
                     }}
                   />
                 ) : (
