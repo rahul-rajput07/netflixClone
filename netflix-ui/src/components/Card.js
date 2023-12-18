@@ -37,7 +37,7 @@ export default React.memo(function Card({
         email,
         data: movieData,
       });
-      message.success("Movie Added to My List");
+      message.success("Added to My List", 2);
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +88,7 @@ export default React.memo(function Card({
                       message.loading("Removing", 1);
                       movies(movieData, email);
                       setTimeout(() => {
-                        message.success("Movie Removed from My List");
+                        message.success("Removed from My List", 2);
                       }, 1200);
                     }}
                   />
